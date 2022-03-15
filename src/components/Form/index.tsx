@@ -14,11 +14,6 @@ interface SelectOptions {
     label: string
 }
 
-interface Data {
-    value: string
-    label: string
-}
-
 const LIST_CONTINENTS = gql`
   {
     continents {
