@@ -1,35 +1,29 @@
 import { SubmitHandler } from "@unform/core";
-import { useState, useMemo } from "react";
-import { useQuery, gql } from "@apollo/client";
-import { useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useLazyQuery } from "@apollo/client";
 import MyForm from "./components/Form";
 import CountriesTable from "./components/table";
+import { LIST_COUNTRIES } from './services/queries';
 
 interface FormData {
     name: string
     age: number
     flightDate: string
-    selectOption: string
+    selectedContinent: string
 }
 
 function App() {
     const [tableDataArray, setTableDataArray] = useState([]);
-    const [continentId, setContinentId] = useState('OC');
+    const [continentId, setContinentId] = useState('');
+    const [showTable, setShowTable] = useState(false);
 
-    const LIST_COUNTRIES = gql`
-    {
-        continent(code: "${continentId}") {
-            countries {
-                name
-                code
-                currency
-            }
+    const [loadEntries, { data, loading }] = useLazyQuery(LIST_COUNTRIES, {variables: { id: continentId }});
+
+    useEffect(() => {
+        if (data) {
+            setTableDataArray(data.continent.countries);
         }
-    }`;
-
-    const { data, loading } = useQuery(LIST_COUNTRIES);
-
-    let formattedData: [];
+    }, [data, loading])
 
     const tableData = useMemo(() => tableDataArray, [tableDataArray]);
 
@@ -47,26 +41,24 @@ function App() {
                 Header: "Moeda",
                 accessor: "currency"
             }
-        ],
-        []
+        ], []
     );
 
-    if (!loading) {
-        formattedData = JSON.parse(JSON.stringify(data.continent.countries));
-    }
-
     const handleSubmit: SubmitHandler<FormData> = submitedFormData => {
-        setContinentId(submitedFormData.selectOption)
-        setTableDataArray(formattedData)
+        setContinentId(submitedFormData.selectedContinent)
+        loadEntries();
+        setShowTable(true);
     };
 
     return (
         <div>
-            <h2>Issue 3 - Prática React</h2>
-            <MyForm handleSubmit={handleSubmit} />
-
-            {loading && <h1>Carregando... </h1>}
-            <CountriesTable columns={columns} data={tableData} />
+            <section className="form-section">
+                <h2>Issue 3 - Prática React</h2>
+                <MyForm handleSubmit={handleSubmit} />
+            </section>
+            <section className="table-section">
+                {showTable ? <CountriesTable columns={columns} data={tableData} /> : <></>}
+            </section>
         </div>
     );
 }
