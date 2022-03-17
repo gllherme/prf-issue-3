@@ -3,7 +3,9 @@ import { SubmitHandler, FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
 import Input from "./input";
 import Select from "./select";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+import { LIST_CONTINENTS } from '../../services/queries'
+import './form.css'
 
 interface formProps {
     handleSubmit: SubmitHandler
@@ -13,15 +15,6 @@ interface SelectOptions {
     value: string
     label: string
 }
-
-const LIST_CONTINENTS = gql`
-  {
-    continents {
-      name
-      code
-    }
-  }
-`;
 
 export default function MyForm({ handleSubmit }: formProps) {
     const [continents, setContinents] = useState<SelectOptions[]>([]);
@@ -37,8 +30,6 @@ export default function MyForm({ handleSubmit }: formProps) {
     
     const formRef = useRef<FormHandles>(null);
     
-    
-
     return (
             <Form ref={formRef} onSubmit={handleSubmit}>
                 <Input name="name" placeholder="Nome" />
@@ -48,7 +39,7 @@ export default function MyForm({ handleSubmit }: formProps) {
                 <label htmlFor="flightDate">Data do voo: </label>
                 <Input name="flightDate" type="date" />
 
-                <Select name="selectOption" label="Escolha seu páis">
+                <Select name="selectedContinent" label="Escolha seu continente: ">
                     {continents.map(option => (
                         <option key={option.value} value={option.value} >
                             {option.label}
