@@ -6,6 +6,7 @@ import Select from "./select";
 import { useQuery } from "@apollo/client";
 import { LIST_CONTINENTS } from '../../services/queries'
 import './form.css'
+import InputMask from "react-input-mask";
 
 interface formProps {
     handleSubmit: SubmitHandler
@@ -35,6 +36,12 @@ export default function MyForm({ handleSubmit }: formProps) {
                 <Input name="name" placeholder="Nome" />
 
                 <Input name="age" type="number" placeholder="Idade"  />
+                
+                <InputMask mask="999.999.999-99">
+                    <Input name="cpf" placeholder="CPF" />
+                </InputMask>
+
+                <Input name="email" type="email" placeholder="Email" />
 
                 <label htmlFor="flightDate">Data do voo: </label>
                 <Input name="flightDate" type="date" />
