@@ -4,10 +4,13 @@ import { useLazyQuery } from "@apollo/client";
 import MyForm from "./components/Form";
 import CountriesTable from "./components/table";
 import { LIST_COUNTRIES } from './services/queries';
+import { userSchema } from './validations/formValidation';
 
 interface FormData {
     name: string
     age: number
+    cpf: string
+    email: string
     flightDate: string
     selectedContinent: string
 }
@@ -44,10 +47,15 @@ function App() {
         ], []
     );
 
-    const handleSubmit: SubmitHandler<FormData> = submitedFormData => {
-        setContinentId(submitedFormData.selectedContinent)
-        loadEntries();
-        setShowTable(true);
+    const handleSubmit: SubmitHandler<FormData> = async submitedFormData => {
+        const isValid = await userSchema.isValid(submitedFormData)
+        if (isValid) {
+            setContinentId(submitedFormData.selectedContinent)
+            loadEntries();
+            setShowTable(true);
+        } else {
+            alert('Campos inválidos')
+        }
     };
 
     return (
