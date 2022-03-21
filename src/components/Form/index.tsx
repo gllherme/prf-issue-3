@@ -35,8 +35,8 @@ export default function MyForm({ handleSubmit }: formProps) {
             <Form ref={formRef} onSubmit={handleSubmit}>
                 <Input name="name" placeholder="Nome" />
 
-                <Input name="age" type="number" placeholder="Idade"  />
-                
+                <Input name="age" type="number" min={0} placeholder="Idade"  />
+
                 <InputMask mask="999.999.999-99">
                     <Input name="cpf" placeholder="CPF" />
                 </InputMask>
