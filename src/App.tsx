@@ -17,13 +17,13 @@ function App() {
     const [continentId, setContinentId] = useState('');
     const [showTable, setShowTable] = useState(false);
 
-    const [loadEntries, { data, loading }] = useLazyQuery(LIST_COUNTRIES, {variables: { id: continentId }});
+    const [loadEntries, { data }] = useLazyQuery(LIST_COUNTRIES, {variables: { id: continentId }});
 
     useEffect(() => {
         if (data) {
             setTableDataArray(data.continent.countries);
         }
-    }, [data, loading])
+    }, [data])
 
     const tableData = useMemo(() => tableDataArray, [tableDataArray]);
 
