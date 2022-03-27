@@ -28,3 +28,11 @@ td {
 tr:nth-child(even) {
     background-color: gray;
 }
+
+tr:nth-child(even):hover {
+    background-color: rgb(70, 70, 70);
+}
+
+tr:hover {
+    background-color: rgb(70, 70, 70);
+}

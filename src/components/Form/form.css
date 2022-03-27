@@ -4,3 +4,7 @@ input {
     margin: 10px;
     width: 20rem;
 }
+
+button {
+    padding: 0;
+}
